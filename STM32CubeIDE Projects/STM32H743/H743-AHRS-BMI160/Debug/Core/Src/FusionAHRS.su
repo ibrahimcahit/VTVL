@@ -1,0 +1,3 @@
+../Core/Src/FusionAHRS.c:32:6:initFusionAHRS	24	static
+../Core/Src/FusionAHRS.c:46:6:getFusionAHRS_9DoF	968	static
+../Core/Src/FusionAHRS.c:87:6:getFusionAHRS_6DoF	768	static

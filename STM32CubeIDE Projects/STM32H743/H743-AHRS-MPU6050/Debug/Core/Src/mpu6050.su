@@ -1,0 +1,9 @@
+../Core/Src/mpu6050.c:42:9:MPU6050_Init	40	static
+../Core/Src/mpu6050.c:76:6:readMPU6050	40	static
+../Core/Src/mpu6050.c:100:6:getMPU6050Ares	4	static
+../Core/Src/mpu6050.c:122:6:getMPU6050Gres	4	static
+../Core/Src/mpu6050.c:143:6:initMPU6050	40	static
+../Core/Src/mpu6050.c:193:6:readMPU6050AccelData	40	static
+../Core/Src/mpu6050.c:202:6:readMPU6050GyroData	40	static
+../Core/Src/mpu6050.c:213:6:calibrateMPU6050	128	static
+../Core/Src/mpu6050.c:393:6:MPU6050SelfTest	152	static

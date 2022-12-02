@@ -1,0 +1,4 @@
+../Core/Src/common_porting.c:14:6:DelayUs	24	static
+../Core/Src/common_porting.c:27:6:bmi160_delay_us	24	static
+../Core/Src/common_porting.c:47:8:SensorAPI_I2Cx_Read	24	static
+../Core/Src/common_porting.c:61:8:SensorAPI_I2Cx_Write	24	static

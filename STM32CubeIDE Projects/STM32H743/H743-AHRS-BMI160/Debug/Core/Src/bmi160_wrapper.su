@@ -1,0 +1,7 @@
+../Core/Src/bmi160_wrapper.c:50:8:BMI160_init	24	static
+../Core/Src/bmi160_wrapper.c:134:8:start_foc	16	static
+../Core/Src/bmi160_wrapper.c:155:8:bmi160ReadAccelGyro	48	static
+../Core/Src/bmi160_wrapper.c:183:6:set_bmi160_Ares	4	static
+../Core/Src/bmi160_wrapper.c:202:6:set_bmi160_Gres	4	static
+../Core/Src/bmi160_wrapper.c:224:6:get_bmi160_Ares	4	static
+../Core/Src/bmi160_wrapper.c:246:6:get_bmi160_Gres	4	static

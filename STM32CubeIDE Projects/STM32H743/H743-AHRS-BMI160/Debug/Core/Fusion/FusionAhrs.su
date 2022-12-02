@@ -1,0 +1,11 @@
+../Core/Fusion/FusionAhrs.c:68:6:FusionAhrsInitialise	48	static
+../Core/Fusion/FusionAhrs.c:83:6:FusionAhrsSetGain	16	static
+../Core/Fusion/FusionAhrs.c:93:6:FusionAhrsSetMagneticField	24	static
+../Core/Fusion/FusionAhrs.c:108:6:FusionAhrsUpdate	1072	static
+../Core/Fusion/FusionAhrs.c:189:6:FusionAhrsUpdateWithoutMagnetometer	56	static
+../Core/Fusion/FusionAhrs.c:210:18:FusionAhrsGetQuaternion	96	static
+../Core/Fusion/FusionAhrs.c:220:15:FusionAhrsGetLinearAcceleration	48	static
+../Core/Fusion/FusionAhrs.c:230:15:FusionAhrsGetEarthAcceleration	88	static
+../Core/Fusion/FusionAhrs.c:254:6:FusionAhrsReinitialise	48	static
+../Core/Fusion/FusionAhrs.c:265:6:FusionAhrsIsInitialising	16	static
+../Core/Fusion/FusionAhrs.c:276:6:FusionAhrsSetYaw	200	static

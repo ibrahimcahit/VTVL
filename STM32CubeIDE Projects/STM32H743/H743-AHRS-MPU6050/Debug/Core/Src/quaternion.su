@@ -1,0 +1,4 @@
+../Core/Src/quaternion.c:5:6:quaternionInit	16	static
+../Core/Src/quaternion.c:20:6:quaternionUpdate	160	static
+../Core/Src/quaternion.c:94:6:quaternionEulerUpdate	16	static
+../Core/Src/quaternion.c:106:6:quaternionEulerUpdateHeading	16	static
