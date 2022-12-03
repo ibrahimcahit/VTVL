@@ -61,8 +61,8 @@ all: main-build
 main-build: H743-AHRS-MULTI-IMU.elf secondary-outputs
 
 # Tool invocations
-H743-AHRS-MULTI-IMU.elf H743-AHRS-MULTI-IMU.map: $(OBJS) $(USER_OBJS) C:\Users\ibrahim\Desktop\VTVL\STM32CubeIDE\ Projects\STM32H743\H743-AHRS-MULTI-IMU\STM32H743VITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "H743-AHRS-MULTI-IMU.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\ibrahim\Desktop\VTVL\STM32CubeIDE Projects\STM32H743\H743-AHRS-MULTI-IMU\STM32H743VITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="H743-AHRS-MULTI-IMU.map" -Wl,--gc-sections -static -L"C:\Users\ibrahim\Desktop\VTVL\STM32CubeIDE Projects\STM32H743\H743-AHRS-MULTI-IMU\Drivers\CMSIS\DSP\Lib\GCC" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+H743-AHRS-MULTI-IMU.elf H743-AHRS-MULTI-IMU.map: $(OBJS) $(USER_OBJS) C:\Users\ibrahim\Desktop\VTVL-CORE\STM32CubeIDE\ Projects\STM32H743\H743-AHRS-MULTI-IMU\STM32H743VITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "H743-AHRS-MULTI-IMU.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\ibrahim\Desktop\VTVL-CORE\STM32CubeIDE Projects\STM32H743\H743-AHRS-MULTI-IMU\STM32H743VITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="H743-AHRS-MULTI-IMU.map" -Wl,--gc-sections -static -L"C:\Users\ibrahim\Desktop\VTVL-CORE\STM32CubeIDE Projects\STM32H743\H743-AHRS-MULTI-IMU\Drivers\CMSIS\DSP\Lib\GCC" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

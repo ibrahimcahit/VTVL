@@ -85,6 +85,7 @@ int _write(int file, char *ptr, int len)
 }
 
 float sample_time_sec_f32 = 1.0f / SAMPLE_FREQ_HZ;
+float sample_time_ms_f32 = (1.0f / SAMPLE_FREQ_HZ) * 1000.0f;
 float sample_time_us_f32 = (1.0f / SAMPLE_FREQ_HZ) * 1000000.0f;
 
 float MPU_accelLowPassFiltered_f32[3], MPU_gyroLowPassFiltered_f32[3], MPU_gyroNotchFiltered_f32[3];
@@ -130,6 +131,8 @@ int main(void)
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
 
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, SET);
+
   //Init DWT Clock for proper us time tick
   DWT_Init();
 
@@ -165,16 +168,11 @@ int main(void)
   //Init sensors
 	while (MPU6050_Init(&hi2c1, &imu_mpu_t));
 
-	if (imu_mpu_t.CALIBRATIN_OK_u8 == TRUE)
-	{
-	   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, SET);
-	}
-
 	while (BMI160_init(imu_bmi_t) == 1);
 
-	if (imu_bmi_t.INIT_OK_i8 != TRUE)
+	if ((imu_bmi_t.INIT_OK_i8 != TRUE) && (imu_mpu_t.CALIBRATIN_OK_u8 == TRUE))
 	{
-	   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, SET);
+	   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, RESET);
 	}
 
 	uint8_t newData_u8;
@@ -189,11 +187,11 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
 	//Get system time in us
-	timer_u64 = micros();
+	timer_u64 =  micros();
 
-	if ( ((timer_u64 - lastTime_u64) >= sample_time_us_f32) && (imu_mpu_t.CALIBRATIN_OK_u8 == TRUE) && (imu_bmi_t.INIT_OK_i8 == TRUE))
+	if ( ((timer_u64 - lastTime_u64) >= sample_time_us_f32) && (imu_mpu_t.CALIBRATIN_OK_u8 == TRUE) && (imu_bmi_t.INIT_OK_i8 != TRUE))
 	{
-		lastTime_u64 = micros();
+		lastTime_u64 = timer_u64 = micros();
 
 		/**************************************| DATA READ |**************************************/
 
@@ -212,23 +210,23 @@ int main(void)
 		BMI_accelLowPassFiltered_f32[1] = (LPFTwoPole_Update(&LPF_bmi_accel_y, imu_bmi_t.BMI160_Accel_f32[1]));
 		BMI_accelLowPassFiltered_f32[2] = (LPFTwoPole_Update(&LPF_bmi_accel_z, imu_bmi_t.BMI160_Accel_f32[2]));
 
-		//Get gyro data in "deg/s" and run LPF
-		MPU_gyroLowPassFiltered_f32[0] = NotchFilter_Update(&NF_mpu_gyro_x, imu_mpu_t.MPU6050_Gyro_f32[0]);
-		MPU_gyroLowPassFiltered_f32[1] = NotchFilter_Update(&NF_mpu_gyro_y, imu_mpu_t.MPU6050_Gyro_f32[1]);
-		MPU_gyroLowPassFiltered_f32[2] = NotchFilter_Update(&NF_mpu_gyro_z, imu_mpu_t.MPU6050_Gyro_f32[2]);
+		//Get gyro data in "deg/s" and run Notch Filter to flat-out any data in specific frequency band
+		MPU_gyroNotchFiltered_f32[0] = NotchFilter_Update(&NF_mpu_gyro_x, imu_mpu_t.MPU6050_Gyro_f32[0]);
+		MPU_gyroNotchFiltered_f32[1] = NotchFilter_Update(&NF_mpu_gyro_y, imu_mpu_t.MPU6050_Gyro_f32[1]);
+		MPU_gyroNotchFiltered_f32[2] = NotchFilter_Update(&NF_mpu_gyro_z, imu_mpu_t.MPU6050_Gyro_f32[2]);
 
-		BMI_gyroLowPassFiltered_f32[0] = NotchFilter_Update(&NF_bmi_gyro_x, imu_bmi_t.BMI160_Gyro_f32[0]);
-		BMI_gyroLowPassFiltered_f32[1] = NotchFilter_Update(&NF_bmi_gyro_y, imu_bmi_t.BMI160_Gyro_f32[1]);
-		BMI_gyroLowPassFiltered_f32[2] = NotchFilter_Update(&NF_bmi_gyro_z, imu_bmi_t.BMI160_Gyro_f32[2]);
+		BMI_gyroNotchFiltered_f32[0] = NotchFilter_Update(&NF_bmi_gyro_x, imu_bmi_t.BMI160_Gyro_f32[0]);
+		BMI_gyroNotchFiltered_f32[1] = NotchFilter_Update(&NF_bmi_gyro_y, imu_bmi_t.BMI160_Gyro_f32[1]);
+		BMI_gyroNotchFiltered_f32[2] = NotchFilter_Update(&NF_bmi_gyro_z, imu_bmi_t.BMI160_Gyro_f32[2]);
 
-		//Put gyro data into Notch Filter to flat-out any data in specific frequency band
-		MPU_gyroNotchFiltered_f32[0] = (LPFTwoPole_Update(&LPF_mpu_gyro_x, MPU_gyroLowPassFiltered_f32[0]));
-		MPU_gyroNotchFiltered_f32[1] = (LPFTwoPole_Update(&LPF_mpu_gyro_y, MPU_gyroLowPassFiltered_f32[1]));
-		MPU_gyroNotchFiltered_f32[2] = (LPFTwoPole_Update(&LPF_mpu_gyro_z, MPU_gyroLowPassFiltered_f32[2]));
+		//Put Notch Filter data into Low Pass Filter
+		MPU_gyroLowPassFiltered_f32[0] = (LPFTwoPole_Update(&LPF_mpu_gyro_x, MPU_gyroNotchFiltered_f32[0]));
+		MPU_gyroLowPassFiltered_f32[1] = (LPFTwoPole_Update(&LPF_mpu_gyro_y, MPU_gyroNotchFiltered_f32[1]));
+		MPU_gyroLowPassFiltered_f32[2] = (LPFTwoPole_Update(&LPF_mpu_gyro_z, MPU_gyroNotchFiltered_f32[2]));
 
-		BMI_gyroNotchFiltered_f32[0] = (LPFTwoPole_Update(&LPF_bmi_gyro_x, BMI_gyroLowPassFiltered_f32[0]));
-		BMI_gyroNotchFiltered_f32[1] = (LPFTwoPole_Update(&LPF_bmi_gyro_y, BMI_gyroLowPassFiltered_f32[1]));
-		BMI_gyroNotchFiltered_f32[2] = (LPFTwoPole_Update(&LPF_bmi_gyro_z, BMI_gyroLowPassFiltered_f32[2]));
+		BMI_gyroLowPassFiltered_f32[0] = (LPFTwoPole_Update(&LPF_bmi_gyro_x, BMI_gyroNotchFiltered_f32[0]));
+		BMI_gyroLowPassFiltered_f32[1] = (LPFTwoPole_Update(&LPF_bmi_gyro_y, BMI_gyroNotchFiltered_f32[1]));
+		BMI_gyroLowPassFiltered_f32[2] = (LPFTwoPole_Update(&LPF_bmi_gyro_z, BMI_gyroNotchFiltered_f32[2]));
 
 		/**************************************| ESTIMATION |**************************************/
 

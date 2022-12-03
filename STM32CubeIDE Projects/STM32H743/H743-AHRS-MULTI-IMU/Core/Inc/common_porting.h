@@ -18,13 +18,13 @@
 #include "stm32h7xx_hal.h"
 #include "main.h"
 
-#define I2C_HANDLE	(hi2c1)
+#define I2C_HANDLE	(hi2c2)
 #define BMI160_ADDR 0x69<<1
 #define BUS_TIMEOUT 1000
 
 #define I2CTIMEOUT 100
 
-extern I2C_HandleTypeDef hi2c1;
+extern I2C_HandleTypeDef hi2c2;
 
 void DelayUs(uint32_t Delay);
 void bmi160_delay_us(uint32_t period);
