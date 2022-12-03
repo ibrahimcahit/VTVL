@@ -8,36 +8,38 @@
 
 ## How to use it? - Low Pass Filter
 
-1) Import Filter
+### 1) Import Filter
 
 ```
 #include "LowPassFilter.h"
 ```
 
-2) Create instance for each axis
+### 2) Create instance for each axis
 
+```
 LPFTwoPole_t LPF_accel_x, LPF_accel_y, LPF_accel_z;
+```
 
-3) Define filter coefficients
+### 3) Define filter coefficients
 
 ```
 #define 	SAMPLE_FREQ_HZ 		1000.0f	// Data sample frequency in Hz
 #define 	LPF_CTOFF_FREQ_HZ    256.0f	// LPF Cut-Off frequency
 ```
 
-4) Get sample time in seconds
+### 4) Get sample time in seconds
 
 ```
 float sample_time_sec_f32 = 1.0f / SAMPLE_FREQ_HZ;
 ```
 
-5) Create data array for filtered values
+### 5) Create data array for filtered values
 
 ```
 float accelLowPassFiltered_f32[3]
 ```
 
-6) Init filter with predefined settings
+### 6) Init filter with predefined settings
 
 ```
 LPFTwoPole_Init(&LPF_accel_x, LPF_TYPE_BESSEL, LPF_CTOFF_FREQ_HZ, sample_time_sec_f32);
@@ -45,7 +47,7 @@ LPFTwoPole_Init(&LPF_accel_y, LPF_TYPE_BESSEL, LPF_CTOFF_FREQ_HZ, sample_time_se
 LPFTwoPole_Init(&LPF_accel_z, LPF_TYPE_BESSEL, LPF_CTOFF_FREQ_HZ, sample_time_sec_f32);
 ```
 
-7) In your while loop, call "LPFTwoPole_Update" to filter your measurments
+###  7) In your while loop, call "LPFTwoPole_Update" to filter your measurments
 
 ```
 accelLowPassFiltered_f32[0] = (LPFTwoPole_Update(&LPF_accel_x, <SENSOR_READING_X_AXIS>));
@@ -55,17 +57,19 @@ accelLowPassFiltered_f32[2] = (LPFTwoPole_Update(&LPF_accel_z, <SENSOR_READING_Z
 
 ## How to use it? - Notch Filter
 
-1) Import Filter
+### 1) Import Filter
 
 ```
 #include "NotchFilter.h"
 ```
 
-2) Create instance for each axis
+### 2) Create instance for each axis
 
+```
 NotchFilter_t NF_gyro_x, NF_gyro_y, NF_gyro_z;
+```
 
-3) Define filter coefficients
+### 3) Define filter coefficients
 
 ```
 #define 	SAMPLE_FREQ_HZ 		1000.0f	// Data sample frequency in Hz
@@ -73,19 +77,19 @@ NotchFilter_t NF_gyro_x, NF_gyro_y, NF_gyro_z;
 #define 	NF_NOTCH_WDTH_HZ	5.0f	// NF notch-width frequency 
 ```
 
-4) Get sample time in seconds
+### 4) Get sample time in seconds
 
 ```
 float sample_time_sec_f32 = 1.0f / SAMPLE_FREQ_HZ;
 ```
 
-5) Create data array for filtered values
+### 5) Create data array for filtered values
 
 ```
 float gyroLowPassFiltered_f32[3]
 ```
 
-6) Init filter with predefined settings
+### 6) Init filter with predefined settings
 
 ```
 NotchFilterInit(&NF_gyro_x, NF_CENTER_FREQ_HZ, NF_NOTCH_WDTH_HZ, sample_time_sec_f32);
@@ -93,7 +97,7 @@ NotchFilterInit(&NF_gyro_y, NF_CENTER_FREQ_HZ, NF_NOTCH_WDTH_HZ, sample_time_sec
 NotchFilterInit(&NF_gyro_z, NF_CENTER_FREQ_HZ, NF_NOTCH_WDTH_HZ, sample_time_sec_f32);
 ```
 
-7) In your while loop, call "LPFTwoPole_Update" to filter your measurments
+### 7) In your while loop, call "LPFTwoPole_Update" to filter your measurments
 
 ```
 gyroNotchFiltered_f32[0] = NotchFilter_Update(&NF_gyro_x, <SENSOR_READING_X_AXIS>);
