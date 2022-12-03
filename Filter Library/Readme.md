@@ -97,7 +97,7 @@ NotchFilterInit(&NF_gyro_y, NF_CENTER_FREQ_HZ, NF_NOTCH_WDTH_HZ, sample_time_sec
 NotchFilterInit(&NF_gyro_z, NF_CENTER_FREQ_HZ, NF_NOTCH_WDTH_HZ, sample_time_sec_f32);
 ```
 
-### 7) In your while loop, call "LPFTwoPole_Update" to filter your measurments
+### 7) In your while loop, call "NotchFilter_Update" to filter your measurments
 
 ```
 gyroNotchFiltered_f32[0] = NotchFilter_Update(&NF_gyro_x, <SENSOR_READING_X_AXIS>);
